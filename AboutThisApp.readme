@@ -1,0 +1,6 @@
+# Created by: Rizky
+
+This app has the following features:
+- it has a camera view and a list view
+- the camera view scans code
+- list view list read input result and adds as list item

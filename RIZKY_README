@@ -1,0 +1,37 @@
+added blindly:
+ com.google.zxing.client.android.PreferencesActivity.java
+
+..CaptureActivity is the Activity that display camera decoder
+..CaptureActivityHandler handles all the activity messages
+.Handler classes handle incoming Android <int> messages in handleMessage(Message) method
+.Handler classes performs outging <int>_identified message in sendMessage(Message) method
+.Thread.run method can contain Looper.prepare() /handler initialization/ Looper.loop() to include this thread to
+  listen to incoming message and send outgoing message
+.CameraManager class encapsulates android Camera object to control Camera related operation. It contains
+  CameraConfigurationManager that further reads and calculates Camera object attributes
+.CameraManager can create LuminanceSource object instances built from camera byte[] YUV data with the barcode framing
+  dimensions
+.CaptureActivity has CameraManager
+.DecodeThread runs the decoding in its thread
+.DecodeThread has DecodeHandler that does the actual byte[] decoding into raw Result object. Result has getText() method
+.Decoding process is run in DecodeHandler; running: buildLuminanceSource[byte[] + frame dimension from camera]
+  ->createBinarizer[from luminanceSource object, creator of YUV to Bit (1/0) data]
+  ->createBinaryBitmap[an encapsulates actual Bit(1/0) data as BitArray (1D bit array) or
+    BitMatrix (2D bit array with dimension)]->createRawResult[using Reader object, decodes BitMap]
+  ->sendDecodeSuccededOrFailedToAMessageHandler[if successful, parse result, if failed request to camera another frame]
+..CaptureActivity encapsulates all visualization in the decoding display
+
+
+last step: recreate:
+one capture activity, one lists captured activity.
+
+1.break it down
+.(X) create a layout that enables camera
+.(X) create activity class that opens camera
+..(X)use activity class to obtain some basic info from camera data, or:
+..(X) finish this project and collect scanned result in history
+.(X)create a layout that list strings
+.(X)create activity for the list layout
+..(X) create a temporary button on the camera view layout
+..(X)adjust the camera activity to send intent to list activity to send a predefined string
+.. (X) adjust the camera activity to have a method that accepts a string parameter and show it on a list view
